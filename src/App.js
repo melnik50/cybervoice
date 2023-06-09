@@ -1,23 +1,96 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React, { useRef, useEffect, useCallback, useState } from 'react';
+import { Widget, addResponseMessage, renderCustomComponent } from 'react-chat-widget-2';
+import ClientForm from "./components/clientForm";
+import "react-chat-widget-2/lib/styles.css";
 
 function App() {
+  const ws = useRef(null);
+  const hash = useRef(null);
+  const chatId = useRef("");
+  const [isNewMessage, setNewMessage] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
+  const [isFormActive, setFormIsActive] = useState(true);
+
+  useEffect(() => {
+    if(!ws.current)  {
+      ws.current = new WebSocket("wss://chattrbyte.ru:27900/");
+    }
+
+    gettingData();
+    changeTimestamps();
+
+    return () =>  {
+      window.addEventListener('beforeunload', function (event) {
+        ws.current.close();
+      })
+    }
+  }, [ws, isFirst, isNewMessage]);
+
+  const changeTimestamps = useCallback(() => {
+    //Изменить время, иначе прилетает в формате AM/PM
+    let timestamps = document.querySelectorAll(".rcw-timestamp");
+    let date = new Date();
+    let hours = date.getHours();
+    for(let timestamp of timestamps) {
+      let timestampSplitted = timestamp.textContent.split(":");
+      if(hours >= 12) {
+        timestamp.textContent = hours + ":" + timestampSplitted[1];
+      }
+    }
+  }, [isNewMessage]);
+
+  const hideForm = () => {
+    console.log(1);
+    setFormIsActive(false);
+  }
+
+  const gettingData = useCallback(() => {
+    if (!ws.current) return;
+    ws.current.onmessage = e => { 
+      const message = JSON.parse(e.data);
+
+      if(message["type"] === "reply") {
+        addResponseMessage(message["text"]);
+      } else {
+        chatId.current = message["chat_id"];
+        hash.current = message["hash"];
+        if(isFirst) {
+          renderCustomComponent(ClientForm, {hash: hash.current, chat_id: chatId.current, hideForm: hideForm});
+        }
+      }
+
+      setNewMessage(!isNewMessage);
+    };
+  }, [isNewMessage, isFirst]);
+
+  const handleNewUserMessage = (newMessage) => {
+    let messages = new Map();
+
+    messages.set('text', newMessage);
+    messages.set('hash', hash.current);
+    messages.set('chat_id', chatId.current);
+    messages.set('type', 'request');
+    messages.set('is_first', 'false');
+
+    if(isFirst) {
+      setIsFirst(false);
+      messages.set('is_first', 'true');
+    }
+
+    ws.current.send(JSON.stringify(Object.fromEntries(messages)));
+
+    setNewMessage(!isNewMessage);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={!isFormActive ? 'pixora-chat px-hide': 'pixora-chat'}>
+      {<Widget
+        title = "Все для стройки ПРОТЭК"
+        senderPlaceHolder = "Введите свое сообщение и нажмите Enter"
+        subtitle = "Онлайн"
+        handleNewUserMessage={handleNewUserMessage}
+      />}
     </div>
   );
 }

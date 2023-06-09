@@ -1,13 +1,183 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: 'ForwardExtra';
+  src: url('fonts/forwardextra_light.otf');
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.chat-bottom {
+  display: none;
+}
+
+.rcw-conversation-container {
+  padding: 20px;
+  background: #005234;
+  font-family: 'ForwardExtra';
+  width: 280px;
+  height: 450px;
+}
+
+.rcw-conversation-container .rcw-header {
+  background-color: #005234 !important;
+  padding: 10px 0px 15px 85px !important;
+  text-align: left !important;
+  background-image: url(chat-logo.png);
+  background-size: 75px;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.rcw-conversation-container .rcw-header span {
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.rcw-launcher {
+  background-color: #005234 !important;
+}
+
+.rcw-conversation-container .rcw-title {
+  font-weight: 100;
+  font-size: 1.2em !important;
+  padding: 0 0 10px 0 !important;
+}
+
+.rcw-messages-container {
+  background-color: #81a99b !important;
+  max-height: 410px;
+  height: 55% !important;
+}
+
+.rcw-new-message {
+  font-size: 14px;
+}
+
+.rcw-sender {
+  background-color: #4d897c !important;
+}
+
+.rcw-send {
+  background: none !important;
+}
+
+.rcw-message {
+  margin-bottom: 20px;
+}
+
+.rcw-new-message {
+  width: calc(86% - 40px) !important;
+}
+
+.rcw-client .rcw-message-text {
+  max-width: 195px !important;
+}
+
+.rcw-client {
+  flex-direction: row-reverse !important;
+  justify-content: space-around;
+}
+
+.rcw-response {
+  flex-direction: row !important;
+  justify-content: space-around;
+}
+
+.rcw-client .rcw-message-text {
+  background-color: #fff !important;
+  color: #005234;
+}
+
+.rcw-client .rcw-timestamp,
+.rcw-response .rcw-timestamp{
+  align-self: center !important;
+  margin: 0 15px;
+  font-size: 1em;
+  color: #005234;
+}
+
+#messages::-webkit-scrollbar {
+  width: 10px;
+  background-color: #81a99b;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #4d897c;
+}
+
+#messages::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #81a99b;
+}
+
+#px-client-form {
+  background: #4d897c;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  display: block;
+}
+
+.pixora-chat.px-hide #px-client-form {
+  display: none;
+}
+
+.pixora-chat:not(.px-hide) .rcw-sender {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+#px-client-form p {
+  margin: 0 0 10px 0;
+}
+
+#px-client-form label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+#px-client-form label span {
+  display: block;
+  font-size: 12px;
+}
+
+#px-client-form label input {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.px-client-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.px-client-form-buttons .button {
+  padding: 5px;
+  background: #005234;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 13px;
+  width: 42%;
+  text-align: center;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 800px){
+  .rcw-widget-container {
+    height: 80vh;
+  }
+
+  .rcw-conversation-container {
+    height: 90%;
+    width: 90%;
+  }
+
+  .rcw-conversation-container .rcw-close-button {
+    background-color: #005234;
+  }
 }
