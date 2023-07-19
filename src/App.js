@@ -91,7 +91,7 @@ function App() {
   return (
     <div className={!isFormActive ? 'pixora-chat px-hide': 'pixora-chat'}>
       {<Widget
-        title = "Все для стройки ПРОТЭК"
+        title = "Все для стройки ПРОТЭК!"
         senderPlaceHolder = "Введите свое сообщение и нажмите Enter"
         subtitle = "Онлайн"
         handleNewUserMessage={handleNewUserMessage}
